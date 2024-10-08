@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('https://pomf2.lain.la/f/y250hw71.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .login-container, .reset-container {
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            width: 350px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.5s ease-in-out;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #ff9800;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #ff9800;
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 152, 0, 0.8);
+        }
+
+        input::placeholder {
+            color: #d3d3d3;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background-color: #ff9800;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff5722;
+        }
+
+        .forgot-password {
+            margin-top: 15px;
+            color: #ff9800;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .error-message, .success-message {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .success-message {
+            color: #00c853;
+        }
+
+        .reset-container {
+            display: none;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Animasi fade-in */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-container, .reset-container {
+                width: 90%;
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            input, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <!-- Login Form -->
+    <div class="login-container fade-in" id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="loginButton">Login</button>
+        <div class="error-message" id="errorMessage"></div>
+        <div class="forgot-password" id="forgotPasswordLink">Forgot Password?</div>
+    </div>
+
+    <!-- Reset Password Form -->
+    <div class="reset-container fade-in" id="resetForm">
+        <h2>Reset Password</h2>
+        <input type="text" id="resetUsername" placeholder="Enter your username">
+        <input type="password" id="newPassword" placeholder="New password">
+        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+        <button id="resetButton">Reset Password</button>
+        <div class="error-message" id="resetErrorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let stars = [];
+
+        function createStar() {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: 0,
+                size: Math.random() * 3 + 1,
+                speed: Math.random() * 3 + 1
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y += star.speed;
+            });
+            stars = stars.filter(star => star.y < canvas.height);
+        }
+
+        function animate() {
+            drawStars();
+            requestAnimationFrame(animate);
+        }
+
+        function triggerStarFall() {
+            for (let i = 0; i < 10; i++) {
+                createStar();
+            }
+        }
+
+        const loginButton = document.getElementById('loginButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const resetForm = document.getElementById('resetForm');
+        const loginForm = document.getElementById('loginForm');
+        const resetButton = document.getElementById('resetButton');
+        const resetErrorMessage = document.getElementById('resetErrorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        let storedPassword = 'password';
+
+        const successSound = new Audio('https://pomf2.lain.la/f/p8by3ovf.wav');  // Ganti dengan path suara sukses
+        const errorSound = new Audio('https://pomf2.lain.la/f/dhzomstt.wav');  // Ganti dengan path suara error
+
+        setInterval(triggerStarFall, 500);
+
+        loginButton.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'user' && password === storedPassword) {
+                successMessage.textContent = 'Login successful!';
+                successSound.play(); // Play success sound
+                setTimeout(() => {
+                    window.location.href = 'profile.html';
+                }, 2000);
+            } else {
+                errorMessage.textContent = 'Invalid username or password';
+                errorSound.play(); // Play error sound
+            }
+        });
+
+        forgotPasswordLink.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            resetForm.style.display = 'block';
+        });
+
+        resetButton.addEventListener('click', () => {
+            const resetUsername = document.getElementById('resetUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validasi Password
+            if (newPassword !== confirmPassword) {
+                resetErrorMessage.textContent = 'Passwords do not match';
+                successMessage.textContent = '';
+                errorSound.play(); // Play error sound
+            } else if (resetUsername === '') {
+                resetErrorMessage.textContent = 'Username cannot be empty';
+                successMessage.textContent = '';
+                errorSound.play(); // Play error sound
+            } else {
+                resetErrorMessage.textContent = '';
+                successMessage.textContent = 'Password successfully reset! You can now login with your new password.';
+                successSound.play(); // Play success sound
+
+                storedPassword = newPassword;
+
+                setTimeout(() => {
+                    loginForm.style.display = 'block';
+                    resetForm.style.display = 'none';
+                    document.getElementById('username').value = resetUsername; // Pre-fill username for login
+                    }, 2000);
+            }
+        });
+
+        // Event listener untuk kembali ke form login
+        document.getElementById('resetUsername').addEventListener('focus', () => {
+            resetErrorMessage.textContent = ''; // Clear any previous error messages
+        });
+
+        document.getElementById('newPassword').addEventListener('focus', () => {
+            resetErrorMessage.textContent = ''; // Clear any previous error messages
+        });
+
+        document.getElementById('confirmPassword').addEventListener('focus', () => {
+            resetErrorMessage.textContent = ''; // Clear any previous error messages
+        });
+
+        // Memastikan canvas bergerak saat jendela diubah ukurannya
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Memulai animasi bintang
+        animate();
+    </script>
+</body>
+</html>
