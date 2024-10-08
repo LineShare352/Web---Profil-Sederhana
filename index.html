@@ -26,7 +26,7 @@
             overflow: hidden;
         }
 
-        .login-container, .reset-container {
+        .container {
             background: rgba(0, 0, 0, 0.85);
             border-radius: 15px;
             padding: 50px 40px;
@@ -83,14 +83,14 @@
             background-color: #ff5722;
         }
 
-        .forgot-password {
+        .link {
             margin-top: 15px;
             color: #ff9800;
             cursor: pointer;
             font-size: 14px;
         }
 
-        .forgot-password:hover {
+        .link:hover {
             text-decoration: underline;
         }
 
@@ -105,10 +105,6 @@
 
         .success-message {
             color: #00c853;
-        }
-
-        .reset-container {
-            display: none;
         }
 
         #canvas {
@@ -134,7 +130,7 @@
         }
 
         @media (max-width: 768px) {
-            .login-container, .reset-container {
+            .container {
                 width: 90%;
                 padding: 30px;
             }
@@ -153,25 +149,37 @@
 
     <canvas id="canvas"></canvas>
 
-    <!-- Login Form -->
-    <div class="login-container fade-in" id="loginForm">
+    <!-- Form Login -->
+    <div class="container fade-in" id="loginForm">
         <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
         <button id="loginButton">Login</button>
         <div class="error-message" id="errorMessage"></div>
-        <div class="forgot-password" id="forgotPasswordLink">Forgot Password?</div>
+        <div class="link" id="resetPasswordLink">Reset Password</div>
+        <div class="link" id="registerLink">Register</div>
     </div>
 
-    <!-- Reset Password Form -->
-    <div class="reset-container fade-in" id="resetForm">
+    <!-- Form Registrasi -->
+    <div class="container fade-in" id="registerForm" style="display: none;">
+        <h2>Register</h2>
+        <input type="text" id="newUsername" placeholder="Create Username" required>
+        <input type="password" id="newPassword" placeholder="Create Password" required>
+        <button id="registerButton">Register</button>
+        <div class="error-message" id="registerErrorMessage"></div>
+        <div class="success-message" id="registerSuccessMessage"></div>
+        <div class="link" id="backToLogin">Back to Login</div>
+    </div>
+
+    <!-- Form Reset Password -->
+    <div class="container fade-in" id="resetForm" style="display: none;">
         <h2>Reset Password</h2>
-        <input type="text" id="resetUsername" placeholder="Enter your username">
-        <input type="password" id="newPassword" placeholder="New password">
-        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+        <input type="password" id="resetPassword" placeholder="New Password" required>
+        <input type="password" id="confirmResetPassword" placeholder="Confirm New Password" required>
         <button id="resetButton">Reset Password</button>
         <div class="error-message" id="resetErrorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
+        <div class="success-message" id="resetSuccessMessage"></div>
+        <div class="link" id="backToLoginReset">Back to Login</div>
     </div>
 
     <script>
@@ -217,14 +225,23 @@
 
         const loginButton = document.getElementById('loginButton');
         const errorMessage = document.getElementById('errorMessage');
-        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const resetPasswordLink = document.getElementById('resetPasswordLink');
+        const registerLink = document.getElementById('registerLink');
         const resetForm = document.getElementById('resetForm');
+        const registerForm = document.getElementById('registerForm');
         const loginForm = document.getElementById('loginForm');
         const resetButton = document.getElementById('resetButton');
         const resetErrorMessage = document.getElementById('resetErrorMessage');
-        const successMessage = document.getElementById('successMessage');
+        const resetSuccessMessage = document.getElementById('resetSuccessMessage');
+        const newUsernameInput = document.getElementById('newUsername');
+        const newPasswordInput = document.getElementById('newPassword');
+        const registerButton = document.getElementById('registerButton');
+        const registerErrorMessage = document.getElementById('registerErrorMessage');
+        const registerSuccessMessage = document.getElementById('registerSuccessMessage');
+        const backToLogin = document.getElementById('backToLogin');
+        const backToLoginReset = document.getElementById('backToLoginReset');
 
-        let storedPassword = 'password';
+        let users = {}; // Simpan pengguna di objek ini
 
         const successSound = new Audio('https://pomf2.lain.la/f/p8by3ovf.wav');  // Ganti dengan path suara sukses
         const errorSound = new Audio('https://pomf2.lain.la/f/dhzomstt.wav');  // Ganti dengan path suara error
@@ -235,73 +252,90 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (username === 'user' && password === storedPassword) {
-                successMessage.textContent = 'Login successful!';
+            if (users[username] && users[username] === password) {
+                errorMessage.textContent = '';
                 successSound.play(); // Play success sound
                 setTimeout(() => {
-                    window.location.href = 'profile.html';
+                    window.location.href = 'profile.html'; // Ganti dengan halaman profil Anda
                 }, 2000);
             } else {
-                errorMessage.textContent = 'Invalid username or password';
+                errorMessage.textContent = 'Username atau password salah!';
                 errorSound.play(); // Play error sound
             }
         });
 
-        forgotPasswordLink.addEventListener('click', () => {
+        resetPasswordLink.addEventListener('click', () => {
             loginForm.style.display = 'none';
             resetForm.style.display = 'block';
+            resetErrorMessage.textContent = '';
+            resetSuccessMessage.textContent = '';
+        });
+
+        backToLoginReset.addEventListener('click', () => {
+            resetForm.style.display = 'none';
+            loginForm.style.display = 'block';
         });
 
         resetButton.addEventListener('click', () => {
-            const resetUsername = document.getElementById('resetUsername').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const newPassword = document.getElementById('resetPassword').value;
+            const confirmPassword = document.getElementById('confirmResetPassword').value;
 
-            // Validasi Password
-            if (newPassword !== confirmPassword) {
-                resetErrorMessage.textContent = 'Passwords do not match';
-                successMessage.textContent = '';
-                errorSound.play(); // Play error sound
-            } else if (resetUsername === '') {
-                resetErrorMessage.textContent = 'Username cannot be empty';
-                successMessage.textContent = '';
-                errorSound.play(); // Play error sound
-            } else {
+            if (newPassword === confirmPassword && newPassword.length > 0) {
+                // Simpan password baru ke pengguna (misalnya pengguna pertama)
+                users['testuser'] = newPassword; // Ganti 'testuser' dengan username yang sesuai
                 resetErrorMessage.textContent = '';
-                successMessage.textContent = 'Password successfully reset! You can now login with your new password.';
+                resetSuccessMessage.textContent = 'Password berhasil direset!';
                 successSound.play(); // Play success sound
-
-                storedPassword = newPassword;
 
                 setTimeout(() => {
                     loginForm.style.display = 'block';
                     resetForm.style.display = 'none';
-                    document.getElementById('username').value = resetUsername; // Pre-fill username for login
-                    }, 2000);
+                }, 2000);
+            } else {
+                resetSuccessMessage.textContent = '';
+                resetErrorMessage.textContent = 'Password tidak cocok atau kosong!';
+                errorSound.play(); // Play error sound
             }
         });
 
-        // Event listener untuk kembali ke form login
-        document.getElementById('resetUsername').addEventListener('focus', () => {
-            resetErrorMessage.textContent = ''; // Clear any previous error messages
+        registerLink.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            registerErrorMessage.textContent = '';
+            registerSuccessMessage.textContent = '';
         });
 
-        document.getElementById('newPassword').addEventListener('focus', () => {
-            resetErrorMessage.textContent = ''; // Clear any previous error messages
+        backToLogin.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
         });
 
-        document.getElementById('confirmPassword').addEventListener('focus', () => {
-            resetErrorMessage.textContent = ''; // Clear any previous error messages
+        registerButton.addEventListener('click', () => {
+            const newUsername = newUsernameInput.value;
+            const newPassword = newPasswordInput.value;
+
+            if (newUsername && newPassword) {
+                if (users[newUsername]) {
+                    registerErrorMessage.textContent = 'Username sudah terdaftar!';
+                    errorSound.play(); // Play error sound
+                } else {
+                    users[newUsername] = newPassword; // Simpan pengguna baru
+                    registerSuccessMessage.textContent = 'Registrasi berhasil! Silakan login.';
+                    successSound.play(); // Play success sound
+
+                    setTimeout(() => {
+                        registerForm.style.display = 'none';
+                        loginForm.style.display = 'block';
+                    }, 2000);
+                }
+            } else {
+                registerErrorMessage.textContent = 'Semua kolom harus diisi!';
+                errorSound.play(); // Play error sound
+            }
         });
 
-        // Memastikan canvas bergerak saat jendela diubah ukurannya
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Memulai animasi bintang
+        // Mulai animasi
         animate();
     </script>
 </body>
-</html>
+                     </html>
