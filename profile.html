@@ -19,7 +19,6 @@
             position: relative;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -32,14 +31,14 @@
         }
 
         .profile-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
             padding: 30px;
-            width: 400px;
+            width: 450px;
             max-width: 90%;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
             text-align: center;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(25px);
             position: relative;
             z-index: 2;
             animation: containerFadeIn 1.5s ease-out;
@@ -53,19 +52,20 @@
 
         .profile-container:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
         }
 
         .profile-picture {
-            width: 130px;
-            height: 130px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             margin: 0 auto;
-            border: 5px solid #ffffff;
-            background-image: url('https://pomf2.lain.la/f/4tdc1bba.jpg');
+            border: 6px solid #ffffff;
+            background-image: url('https://pomf2.lain.la/f/4xrail44.jpg');
             background-size: cover;
             background-position: center;
             animation: profilePop 1s ease-in-out, floating 3s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
         @keyframes profilePop {
@@ -79,16 +79,26 @@
             100% { transform: translateY(0); }
         }
 
-        .name {
-            margin-top: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            animation: fadeInText 1.5s ease-out;
+        .rainbow-text {
+        font-size: 48px;
+        font-family: 'Montserrat', sans-serif; 
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #7f00ff);
+        background-size: 300%;
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        background-clip: text; 
+        animation: rainbow 5s linear infinite; 
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+        }
+
+        @keyframes rainbow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
         }
 
         .description {
-            font-size: 15px;
+            font-size: 16px;
             margin-top: 5px;
             color: #e0e0e0;
             animation: fadeInText 2s ease-out;
@@ -99,7 +109,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Social Media Icons */
         .social-icons {
             display: flex;
             justify-content: center;
@@ -110,27 +119,27 @@
         .social-icons a {
             margin: 0 10px;
             color: #ffffff;
-            font-size: 24px;
-            transition: transform 0.2s ease-in-out, background-color 0.2s;
-            padding: 10px;
+            font-size: 26px;
+            transition: transform 0.3s ease-in-out, background-color 0.2s;
+            padding: 12px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         .social-icons a:hover {
             transform: scale(1.2);
-            background-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
         }
 
-        /* Music Player */
         .music-player {
-            margin-top: 30px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
             padding: 20px;
             position: relative;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
             animation: fadeInMusic 2.5s ease-out;
         }
 
@@ -140,18 +149,20 @@
         }
 
         .music-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #ffeb3b;
+            text-shadow: 0 0 8px rgba(255, 235, 59, 0.5);
         }
 
         .progress-bar {
             background: #ffffff;
-            height: 8px;
+            height: 10px;
             border-radius: 5px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.6);
         }
 
         .progress {
@@ -159,31 +170,30 @@
             width: 0%;
             height: 100%;
             border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0, 188, 212, 0.7);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.8);
         }
 
         .play-button {
             position: absolute;
-            top: 20px;
+            top: 18px;
             right: 15px;
             background: linear-gradient(145deg, #ff9800, #ff5722);
             border: none;
             border-radius: 50%;
-            padding: 10px;
+            padding: 12px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
             color: #ffffff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
 
         .play-button:hover {
             background-color: #ff5722;
             transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(255, 87, 34, 0.6);
+            box-shadow: 0 0 20px rgba(255, 87, 34, 0.6);
         }
 
-        /* Parallax Stars */
         .stars {
             position: absolute;
             width: 100%;
@@ -192,27 +202,14 @@
             left: 0;
             background: url('https://pomf2.lain.la/f/czmsja1.jpg') repeat;
             background-size: cover;
-            opacity: 0.5;
+            opacity: 0.7;
             z-index: 1;
-            animation: starsMove 20s linear infinite;
+            animation: starsMove 25s linear infinite;
         }
 
         @keyframes starsMove {
             0% { background-position: 0 0; }
-            100% { background-position: 200% 200%; }
-        }
-
-        /* Gradient background animation */
-        .gradient-background {
-            background: linear-gradient(120deg, #ff6f91, #ff9671, #ffc75f, #f9f871);
-            background-size: 400% 400%;
-            animation: gradientShift 10s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            100% { background-position: 150% 150%; }
         }
 
         .footer {
@@ -226,10 +223,9 @@
     <div class="stars"></div>
     <div class="profile-container gradient-background">
         <div class="profile-picture"></div>
-        <div class="name">Line Dev</div>
+        <div class="rainbow-text">Line Dev</div>
         <div class="description">Web Developer | Music Lover</div>
 
-        <!-- Social Media Icons -->
         <div class="social-icons">
             <a href="https://wa.me/6285710230711" target="_blank">
                 <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp" />
@@ -245,7 +241,6 @@
             </a>
         </div>
 
-        <!-- Music Player -->
         <div class="music-player">
             <div class="music-title" id="music-title">JKT48 - Seventeen (Color Coded Lyrics)</div>
             <div class="progress-bar">
@@ -261,12 +256,11 @@
     </div>
 
     <script>
-        // Music player functionality
+    
         const audio = document.getElementById('audio');
         const playPauseButton = document.getElementById('playPauseButton');
         const progressBar = document.getElementById('progress');
 
-        // Toggle play/pause on button click
         playPauseButton.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
@@ -277,35 +271,31 @@
             }
         });
 
-        // Update progress bar as the audio plays
         audio.addEventListener('timeupdate', () => {
             const progressPercent = (audio.currentTime / audio.duration) * 100;
             progressBar.style.width = progressPercent + '%';
         });
 
-        // Reset progress bar and button when audio ends
         audio.addEventListener('ended', () => {
             progressBar.style.width = '0%';
             playPauseButton.innerHTML = '&#9658;'; // Reset to play icon
         });
 
-        // Add floating effect for the profile container (optional)
         const profileContainer = document.querySelector('.profile-container');
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             profileContainer.style.transform = `translateY(${scrollY * 0.5}px)`;
         });
 
-        // Adding background music (if desired)
         window.addEventListener('load', () => {
             const bgAudio = new Audio('https://pomf2.lain.la/f/bgat1sa.mp3');
             bgAudio.loop = true;
             bgAudio.volume = 0.05; // Set low background music volume
             bgAudio.play().catch(() => {
-                // Handle autoplay restrictions
+
                 console.log('Autoplay restrictions prevented background music.');
             });
         });
     </script>
 </body>
-    </html>
+</html>
